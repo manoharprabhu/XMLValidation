@@ -4,12 +4,11 @@
  */
 package com.axionet.manoharprabhu;
 
+import java.awt.Frame;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.nio.charset.CharsetDecoder;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.*;
 import org.apache.xmlbeans.impl.tool.StreamInstanceValidator;
@@ -19,6 +18,47 @@ import org.apache.xmlbeans.impl.tool.StreamInstanceValidator;
  * javadeveloper
  */
 public class MainFrame extends javax.swing.JFrame {
+    
+    public class Worker extends SwingWorker<String, String>{
+
+        @Override
+        protected String doInBackground() throws Exception {
+            if(inputXML.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(f, "Please select an XML file for validation", "Select XML",JOptionPane.ERROR_MESSAGE);
+        }
+        else  if(inputXSD.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(f, "Please select an XSD file for performing validation", "Select XSD",JOptionPane.ERROR_MESSAGE);
+        }
+        else {
+            ArrayList<String> ar = new ArrayList<>();
+            ar.add(inputXSD.getText().toString());
+            ar.add(inputXML.getText().toString());
+            ar.add("-dl");
+            
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            PrintStream ps = new PrintStream(baos);
+            System.setOut(ps);
+         publish(String.valueOf("start progress"));
+            StreamInstanceValidator.main(ar.toArray(new String[ar.size()]));
+         publish(String.valueOf("end progress"));   
+            outputText.setText(baos.toString());
+     
+            }
+            return null;
+        }
+        
+        @Override
+        protected void process(List<String> item) {
+            if(item.get(0).equals("start progress")) {
+        progressBar.setIndeterminate(true);
+            }
+            else {
+                 progressBar.setIndeterminate(false);
+                 progressBar.setValue(100);
+            }
+    }
+        
+    }
 
     /**
      * Creates
@@ -190,35 +230,36 @@ public class MainFrame extends javax.swing.JFrame {
     
     
     private void validateXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_validateXMLActionPerformed
-        if(inputXML.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please select an XML file for validation", "Select XML",JOptionPane.ERROR_MESSAGE);
-        }
-        else  if(inputXSD.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please select an XSD file for performing validation", "Select XSD",JOptionPane.ERROR_MESSAGE);
-        }
-        else {
-            ArrayList<String> ar = new ArrayList<>();
-            ar.add(inputXSD.getText().toString());
-            ar.add(inputXML.getText().toString());
-            ar.add("-dl");
-            
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            PrintStream ps = new PrintStream(baos);
-            System.setOut(ps);
-            
-      
-            
-            progressBar.setValue(0);
-            progressBar.setIndeterminate(true);
-           
-            StreamInstanceValidator.main(ar.toArray(new String[ar.size()]));
-            
-             progressBar.setIndeterminate(false);
-            outputText.setText(baos.toString());
-           
-            progressBar.setValue(100);
-         
-            }
+//        if(inputXML.getText().isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "Please select an XML file for validation", "Select XML",JOptionPane.ERROR_MESSAGE);
+//        }
+//        else  if(inputXSD.getText().isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "Please select an XSD file for performing validation", "Select XSD",JOptionPane.ERROR_MESSAGE);
+//        }
+//        else {
+//            ArrayList<String> ar = new ArrayList<>();
+//            ar.add(inputXSD.getText().toString());
+//            ar.add(inputXML.getText().toString());
+//            ar.add("-dl");
+//            
+//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//            PrintStream ps = new PrintStream(baos);
+//            System.setOut(ps);
+//            
+//      
+//            
+//            progressBar.setValue(0);
+//            progressBar.setIndeterminate(true);
+//           
+//            StreamInstanceValidator.main(ar.toArray(new String[ar.size()]));
+//            
+//             progressBar.setIndeterminate(false);
+//            outputText.setText(baos.toString());
+//           
+//            progressBar.setValue(100);
+//         
+//            }
+        new Worker().execute();
     }//GEN-LAST:event_validateXMLActionPerformed
  
     
@@ -249,10 +290,12 @@ public class MainFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainFrame().setVisible(true);
+                f = new MainFrame();
+                f.setVisible(true);
             }
         });
     }
+    private static Frame f;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel XMLLabel;
     private javax.swing.JLabel XSLLabel;
