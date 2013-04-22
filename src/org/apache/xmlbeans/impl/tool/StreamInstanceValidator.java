@@ -110,6 +110,16 @@ public class StreamInstanceValidator
         File[] schemaFiles = cl.filesEndingWith(".xsd");
         File[] instanceFiles = cl.filesEndingWith(".xml");
         File[] jarFiles = cl.filesEndingWith(".jar");
+        
+        System.out.println("Not an XSD file" + schemaFiles);
+        if(schemaFiles==null) {
+            System.out.println("Not an XSD file" + schemaFiles);
+        }
+        
+        System.out.println("Not an XML file" + instanceFiles);
+        if(instanceFiles == null) {
+            System.out.println("Not an XML file" + instanceFiles);
+        }
 
         List sdocs = new ArrayList();
 
@@ -121,7 +131,7 @@ public class StreamInstanceValidator
                         schemaFiles[i], options.setLoadMessageDigest()));
             }
             catch (Exception e) {
-                System.err.println(schemaFiles[i] + " not loadable: " + e);
+                System.out.println(schemaFiles[i] + " not loadable: " + e);
             }
         }
 
@@ -147,7 +157,7 @@ public class StreamInstanceValidator
         }
         catch (Exception e) {
             if (compErrors.isEmpty() || !(e instanceof XmlException)) {
-                e.printStackTrace(System.err);
+                e.printStackTrace(System.out);
             }
             System.out.println("Schema invalid");
             for (Iterator i = compErrors.iterator(); i.hasNext();)
@@ -177,7 +187,6 @@ public class StreamInstanceValidator
                 final FileInputStream fis = new FileInputStream(file);
                 final XMLStreamReader rdr =
                     XML_INPUT_FACTORY.createXMLStreamReader(path, fis);
-
                 //advance to first start element.
                 while(!rdr.isStartElement()) {
                     rdr.next();
@@ -204,8 +213,8 @@ public class StreamInstanceValidator
                 errors.add(e);
             }
             catch (Exception e) {
-                System.err.println("error for file: " + file + ": " + e);
-                e.printStackTrace(System.err);
+                System.out.println("error for file: " + file + ": " + e);
+                e.printStackTrace(System.out);
                 continue;
             }
 

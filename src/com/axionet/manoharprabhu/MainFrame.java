@@ -28,8 +28,20 @@ public class MainFrame extends javax.swing.JFrame {
         }
         else  if(inputXSD.getText().isEmpty()) {
             JOptionPane.showMessageDialog(f, "Please select an XSD file for performing validation", "Select XSD",JOptionPane.ERROR_MESSAGE);
-        }
+        } 
         else {
+            
+             if(!inputXML.getText().subSequence(inputXML.getText().length()-3, inputXML.getText().length()).toString().toLowerCase().equals("xml")) {
+                 JOptionPane.showMessageDialog(f, "Only XML files allowed for validation", "Select XML",JOptionPane.ERROR_MESSAGE);
+                 return null;
+             }
+             if(!inputXSD.getText().subSequence(inputXSD.getText().length()-3, inputXSD.getText().length()).toString().toLowerCase().equals("xsd")) {
+                 JOptionPane.showMessageDialog(f, "Please provide a valid XSD file", "Select XSD",JOptionPane.ERROR_MESSAGE); 
+                 return null;
+             }
+             
+            
+              
             ArrayList<String> ar = new ArrayList<>();
             ar.add(inputXSD.getText().toString());
             ar.add(inputXML.getText().toString());
@@ -38,6 +50,7 @@ public class MainFrame extends javax.swing.JFrame {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             PrintStream ps = new PrintStream(baos);
             System.setOut(ps);
+           
          publish(String.valueOf("start progress"));
             StreamInstanceValidator.main(ar.toArray(new String[ar.size()]));
          publish(String.valueOf("end progress"));   
@@ -230,35 +243,7 @@ public class MainFrame extends javax.swing.JFrame {
     
     
     private void validateXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_validateXMLActionPerformed
-//        if(inputXML.getText().isEmpty()) {
-//            JOptionPane.showMessageDialog(this, "Please select an XML file for validation", "Select XML",JOptionPane.ERROR_MESSAGE);
-//        }
-//        else  if(inputXSD.getText().isEmpty()) {
-//            JOptionPane.showMessageDialog(this, "Please select an XSD file for performing validation", "Select XSD",JOptionPane.ERROR_MESSAGE);
-//        }
-//        else {
-//            ArrayList<String> ar = new ArrayList<>();
-//            ar.add(inputXSD.getText().toString());
-//            ar.add(inputXML.getText().toString());
-//            ar.add("-dl");
-//            
-//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//            PrintStream ps = new PrintStream(baos);
-//            System.setOut(ps);
-//            
-//      
-//            
-//            progressBar.setValue(0);
-//            progressBar.setIndeterminate(true);
-//           
-//            StreamInstanceValidator.main(ar.toArray(new String[ar.size()]));
-//            
-//             progressBar.setIndeterminate(false);
-//            outputText.setText(baos.toString());
-//           
-//            progressBar.setValue(100);
-//         
-//            }
+
         new Worker().execute();
     }//GEN-LAST:event_validateXMLActionPerformed
  
