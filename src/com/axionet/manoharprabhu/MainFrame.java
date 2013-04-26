@@ -45,13 +45,16 @@ public class MainFrame extends javax.swing.JFrame {
             ArrayList<String> ar = new ArrayList<>();
             ar.add(inputXSD.getText().toString());
             ar.add(inputXML.getText().toString());
+            //switch to enable network downloads for dependant XSDs
             ar.add("-dl");
             
+            //Set printstream to print all the system.out to the text box on GUI
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             PrintStream ps = new PrintStream(baos);
             System.setOut(ps);
            
          publish(String.valueOf("start progress"));
+         //Validate XML using XMLBeans
             StreamInstanceValidator.main(ar.toArray(new String[ar.size()]));
          publish(String.valueOf("end progress"));   
             outputText.setText(baos.toString());
