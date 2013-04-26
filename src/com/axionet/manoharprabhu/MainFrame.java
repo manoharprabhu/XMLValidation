@@ -58,6 +58,11 @@ public class MainFrame extends javax.swing.JFrame {
             StreamInstanceValidator.main(ar.toArray(new String[ar.size()]));
          publish(String.valueOf("end progress"));   
             outputText.setText(baos.toString());
+            if(outputText.getText().contains("valid.")) {
+                convertXML.setEnabled(true);
+            } else {
+                convertXML.setEnabled(false);
+            }
      
             }
             return null;
@@ -101,6 +106,7 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         outputText = new javax.swing.JTextArea();
         progressBar = new javax.swing.JProgressBar();
+        convertXML = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -150,6 +156,14 @@ public class MainFrame extends javax.swing.JFrame {
         outputText.setWrapStyleWord(true);
         jScrollPane1.setViewportView(outputText);
 
+        convertXML.setText("Convert XML to CSV");
+        convertXML.setEnabled(false);
+        convertXML.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                convertXMLActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -162,22 +176,26 @@ public class MainFrame extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(XMLLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(XSLLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(4, 4, 4)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(23, 23, 23)
                                 .addComponent(inputXML, javax.swing.GroupLayout.PREFERRED_SIZE, 527, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(chooseXML))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(chooseXML)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(convertXML, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(validateXML, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(inputXSD, javax.swing.GroupLayout.PREFERRED_SIZE, 527, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(chooseXSD)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(inputXSD, javax.swing.GroupLayout.PREFERRED_SIZE, 527, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(validateXML, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(chooseXSD)))))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -197,8 +215,10 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(validateXML)
                     .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addComponent(convertXML)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -249,6 +269,13 @@ public class MainFrame extends javax.swing.JFrame {
 
         new Worker().execute();
     }//GEN-LAST:event_validateXMLActionPerformed
+
+    private void convertXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_convertXMLActionPerformed
+        ConvertFrame c = new ConvertFrame();
+        c.setBounds(this.getX(), this.getY(),this.getWidth(), this.getHeight());
+        c.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_convertXMLActionPerformed
  
     
     public static void main(String args[]) {
@@ -280,6 +307,7 @@ public class MainFrame extends javax.swing.JFrame {
             public void run() {
                 f = new MainFrame();
                 f.setVisible(true);
+                
             }
         });
     }
@@ -289,6 +317,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel XSLLabel;
     private javax.swing.JButton chooseXML;
     private javax.swing.JButton chooseXSD;
+    private javax.swing.JButton convertXML;
     private javax.swing.JTextField inputXML;
     private javax.swing.JTextField inputXSD;
     private javax.swing.JScrollPane jScrollPane1;
